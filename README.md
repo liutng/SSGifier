@@ -1,2 +1,2 @@
 # SSGifier
-This is the project for DPS909
+This is a CLI SSG(Static Site Generator) that generates static website.
