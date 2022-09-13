@@ -18,7 +18,7 @@ namespace SDDS {
 	class ArgumentQueue {
 		Argument** mArgs = new Argument*[0];
 		size_t mArgCnt = 0;
-		char* mMessage;
+		std::string mMessage;
 		void convertFile(std::string inputFile, std::string outputFileDir, std::string stylesheet);
 	public:
 		bool addArg(const char* switchStr, const char* arg);
