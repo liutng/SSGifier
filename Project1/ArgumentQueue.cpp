@@ -4,10 +4,10 @@
 #include <filesystem>
 #include "ArgumentQueue.h"
 #include"Utils.h"
-bool SDDS::ArgumentQueue::addArg(const char* switchStr,const char* arg) {
+bool SDDS::ArgumentQueue::addArg(const char* switchStr, const char* arg) {
 	bool rc;
 	Argument* tmpArg = new Argument();
-	rc = tmpArg->parseArg(switchStr,arg);
+	rc = tmpArg->parseArg(switchStr, arg);
 	mArgs[mArgCnt++] = tmpArg;
 	return rc;
 }
@@ -54,7 +54,13 @@ bool SDDS::ArgumentQueue::execute() {
 		if (unkownArg)
 			std::cout << "Unkown switch " << "\"" << unkownSwitchStr << "\"." << std::endl << "Use --help or -h for help." << std::endl;
 		else if (showHelp)
-			std::cout << "Please " << std::endl;
+			std::cout << "The list below is all the different parameters you can pass to SSGifier." << std::endl <<
+			"-v --version - prints out the version of SSGifier" << std::endl <<
+			"-o, --output - specify the output directory, the directory \" dlist\" is used by default." << std::endl <<
+			"-i, --input - specify the input files\\directory, this is an necessary argument." << std::endl <<
+			"-s, --stylesheet - specify the stylesheet for the HTML pages." << std::endl <<
+			"-h, --help - show help."
+			<< std::endl;
 		else if (showVersion)
 			std::cout << "SSGifier V0.1 by Tong Liu" << std::endl;
 		else if (emptyArg)
@@ -68,11 +74,11 @@ bool SDDS::ArgumentQueue::execute() {
 			}
 			if (SDDS::checkIfItsDirectory(inputFile)) { //if the input arg is a directory
 				for (const auto& entry : std::filesystem::directory_iterator(inputFile)) {
-					convertFile(entry.path().string(), outputFileDir,styleSheet);
+					convertFile(entry.path().string(), outputFileDir, styleSheet);
 				}
 			}
 			else
-				convertFile(inputFile, outputFileDir,styleSheet);
+				convertFile(inputFile, outputFileDir, styleSheet);
 		}
 	}
 	return rc;
@@ -82,8 +88,8 @@ SDDS::ArgumentQueue::~ArgumentQueue() {
 		delete mArgs[i];
 	}
 }
-bool SDDS::Argument::parseArg(const char* switchStr,const char* arg) {
-	if (mArg != nullptr) 
+bool SDDS::Argument::parseArg(const char* switchStr, const char* arg) {
+	if (mArg != nullptr)
 		delete mArg;
 	if (arg != nullptr) {
 		mArg = new char[std::strlen(arg)];
@@ -95,11 +101,11 @@ bool SDDS::Argument::parseArg(const char* switchStr,const char* arg) {
 	if (std::strcmp(switchStr, "--help") == 0 || std::strcmp(switchStr, "-h") == 0) {
 		mArgTag = ArgTag::HELP;
 	}
-	else if (std::strcmp(switchStr, "--input") == 0 || std::strcmp(switchStr,"-i") == 0){
-			mArgTag = ArgTag::INPUT;
+	else if (std::strcmp(switchStr, "--input") == 0 || std::strcmp(switchStr, "-i") == 0) {
+		mArgTag = ArgTag::INPUT;
 	}
-	else if (std::strcmp(switchStr, "--output" ) == 0 || std::strcmp(switchStr,"-o") == 0) {
-			mArgTag = ArgTag::OUTPUT;
+	else if (std::strcmp(switchStr, "--output") == 0 || std::strcmp(switchStr, "-o") == 0) {
+		mArgTag = ArgTag::OUTPUT;
 
 	}
 	else if (std::strcmp(switchStr, "--version") == 0 || std::strcmp(switchStr, "-v") == 0) {
@@ -107,20 +113,20 @@ bool SDDS::Argument::parseArg(const char* switchStr,const char* arg) {
 	}
 	else if (std::strcmp(switchStr, "--stylesheet") == 0 || std::strcmp(switchStr, "-s") == 0)
 		mArgTag = ArgTag::CSS;
-		else
+	else
 	{
 		mArgTag = ArgTag::UNKOWN;
 		return false;
 	}
 	// check if argument is necessary for the current switch
-	if (mArgTag != ArgTag::VERSION && mArgTag != ArgTag::HELP && mArgTag != ArgTag::UNKOWN ) {
+	if (mArgTag != ArgTag::VERSION && mArgTag != ArgTag::HELP && mArgTag != ArgTag::UNKOWN) {
 		if (arg == nullptr) {
 			mArgTag = ArgTag::EMPTY;
 			return false;
 		}
 	}
-		return true;
-	
+	return true;
+
 }
 
 SDDS::Argument::ArgTag SDDS::Argument::getArgTag() {
