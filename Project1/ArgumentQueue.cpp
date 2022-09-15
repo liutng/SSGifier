@@ -20,7 +20,7 @@ bool SDDS::ArgumentQueue::execute() {
 	std::string outputFileDir;
 	std::string styleSheet;
 	if (mArgCnt == 0) {
-		mMessage = "Must at least specify an input file and output file.";
+		mMessage = "Please at least specify an input file.";
 	}
 	else {
 		for (size_t i = 0; i < mArgCnt; i++) {
@@ -55,7 +55,7 @@ bool SDDS::ArgumentQueue::execute() {
 			std::cout << "Unkown switch " << "\"" << unkownSwitchStr << "\"." << std::endl << "Use --help or -h for help." << std::endl;
 		else if (showHelp)
 			std::cout << "The list below is all the different parameters you can pass to SSGifier." << std::endl<<
-			"-v --version - prints out the version of SSGifier" << std::endl<<
+			"-v, --version - prints out the version of SSGifier" << std::endl<<
 			"-o, --output - specify the output directory, the directory \" dlist\" is used by default." <<std::endl <<
 			"-i, --input - specify the input files\\directory, this is an necessary argument." << std::endl <<
 			"-s, --stylesheet - specify the stylesheet for the HTML pages." << std::endl <<
@@ -74,7 +74,8 @@ bool SDDS::ArgumentQueue::execute() {
 			}
 			if (SDDS::checkIfItsDirectory(inputFile)) { //if the input arg is a directory
 				for (const auto& entry : std::filesystem::directory_iterator(inputFile)) {
-					convertFile(entry.path().string(), outputFileDir,styleSheet);
+					if(entry.path().string().find(".txt") != std::string::npos) //Only process .txt files
+						convertFile(entry.path().string(), outputFileDir,styleSheet);
 				}
 			}
 			else
@@ -143,7 +144,7 @@ void SDDS::ArgumentQueue::convertFile(std::string inputFile, std::string outputF
 	std::string fileContent = SDDS::readFileAsHtmlStr(inputFile).c_str();
 	std::filesystem::create_directory(outputFileDir);
 	if (fileContent.empty()) {
-		std::cout << "Cannot find file: " << inputFile << std::endl;
+		std::cout << "Cannot find file or directory: " << inputFile << std::endl;
 	}
 	else {
 		std::string fileName = SDDS::extractFileName(inputFile);
