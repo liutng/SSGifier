@@ -1,6 +1,10 @@
 # SSGifier
 This is a CLI SSG(Static Site Generator) that generates static website.
 
+# Optional functions implemented
+* allow the user to specify a different output directory using --output or -o. If not specified, dist will be used, but if the user specifies a different output path, use that. Print an error if the specified output path is not a valid directory.
+* allow the user to optionally specify a --stylesheet or -s URL to a CSS stylesheet to be used in the <head> of your generated HTML files.
+
 # Requirements
 * C++ 2017
 * Linux/Windows
