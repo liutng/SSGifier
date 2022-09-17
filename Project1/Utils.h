@@ -35,6 +35,12 @@ namespace SDDS
 	{
 		std::ifstream input(filePath);
 		std::string inputStr;
+		if (input.good())
+		{
+			inputStr = "<h1>";
+			std::getline(input, inputStr);
+			inputStr.append("</h1>").append("<br/>").append("<br/>");
+		}
 		while (input.good())
 		{
 			std::string strTmp;
