@@ -64,7 +64,7 @@ bool SDDS::ArgumentQueue::execute()
 			std::cout
 				<< "Usage: ssgifier --input <file/directory path> [optional command]" << std::endl
 				<< std::endl
-				<< "SSGifier is a commandline application to generate static website from txt files." << std::endl
+				<< "SSGifier is a commandline application to generate static website from txt or md files." << std::endl
 				<< std::endl
 				<< "The list below is all the different parameters you can pass to SSGifier." << std::endl
 				<< "-v, --version - prints out the version of SSGifier" << std::endl
@@ -95,12 +95,21 @@ bool SDDS::ArgumentQueue::execute()
 			{ // if the input arg is a directory
 				for (const auto &entry : std::filesystem::directory_iterator(inputFile))
 				{
-					if (entry.path().string().find(".txt") != std::string::npos) // Only process .txt files
+					if (entry.path().string().find(".txt") != std::string::npos) // process .txt files
 						convertFile(entry.path().string(), outputFileDir, styleSheet);
+					else if (entry.path().string().find(".md") != std::string::npos) // process .md files
+						convertFileMD(entry.path().string(), outputFileDir, styleSheet);
+
 				}
 			}
-			else
+			else if (inputFile.find(".txt") != std::string::npos) // checks if it is txt file
+			{
 				convertFile(inputFile, outputFileDir, styleSheet);
+			}
+			else if (inputFile.find(".md") != std::string::npos) // checks if it is md file
+			{
+				convertFileMD(inputFile, outputFileDir, styleSheet);
+			}
 		}
 	}
 	return rc;
@@ -194,3 +203,29 @@ void SDDS::ArgumentQueue::convertFile(std::string inputFile, std::string outputF
 			std::cout << "Could not write " << filePath << std::endl;
 	}
 }
+
+void SDDS::ArgumentQueue::convertFileMD(std::string inputFile, std::string outputFileDir, std::string stylesheet)
+{
+	std::string fileContent = SDDS::readFileAsHtmlStrMD(inputFile).c_str();
+	std::filesystem::create_directory(outputFileDir);
+	if (fileContent.empty())
+	{
+		std::cout << "Cannot find file or directory: " << inputFile << std::endl;
+	}
+	else
+	{
+		std::string fileName = SDDS::extractFileName(inputFile);
+		fileName = fileName.substr(0, fileName.find('.'));
+		const std::string HTMLContentStr = SDDS::generateHTMLAsStr(fileName, fileContent, stylesheet);
+		if (outputFileDir.substr(0, 2) == "./" || outputFileDir.substr(0, 2) == ".\\") // remove the ./ or .\ at the begining of output file directory.
+			outputFileDir = outputFileDir.substr(outputFileDir.find(".") + 1, outputFileDir.length());
+		if (outputFileDir.find("\\") == std::string::npos && outputFileDir.find("/") == std::string::npos) // Append output path with "/" if the output arg is not postfixed with /
+			outputFileDir.append("/");
+		std::string filePath = "./" + outputFileDir + fileName + ".html";
+		if (SDDS::writeHTMLToFile(filePath, HTMLContentStr))
+			std::cout << filePath << " is successfully converted and written." << std::endl;
+		else
+			std::cout << "Could not write " << filePath << std::endl;
+	}
+}
+
