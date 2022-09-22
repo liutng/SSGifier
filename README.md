@@ -21,6 +21,14 @@ The list below is all the different parameters you can pass to SSGifier.
 -i, --input - specify the input files\directory, this is an necessary argument.  
 -s, --stylesheet - specify the stylesheet for the HTML pages.(Optional)  
 -h, --help - show help.  
+  
+# Added 
+
+Markdown Support added for # Headings and * Italics just use a file with a .md file extension
+
+# Added 
+
+Markdown Support added for # Headings and * Italics just use a file with a .md file extension
 
 # License
 [Do What The Fuck You Want To Public License(WTFPL)](https://raw.githubusercontent.com/liutng/SSGifier/main/License.md)
