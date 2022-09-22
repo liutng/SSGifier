@@ -20,7 +20,6 @@ namespace SDDS {
 		size_t mArgCnt = 0;
 		std::string mMessage;
 		void convertFile(std::string inputFile, std::string outputFileDir, std::string stylesheet);
-		void convertFileMD(std::string inputFile, std::string outputFileDir, std::string stylesheet);
 	public:
 		bool addArg(const char* switchStr, const char* arg);
 		bool execute();
