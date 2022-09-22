@@ -10,7 +10,7 @@ namespace SDDS
 	{
 
 		std::stringstream ss;
-		ss << "<!doctype html>"
+		ss << "<!doctype html>\n"
 		   << "<html lang = \"en\">" << std::endl
 		   << "<head>" << std::endl;
 		if (!stylesheet.empty())
@@ -23,7 +23,7 @@ namespace SDDS
 		   << "<h1> " << fileName << "</h1>" << std::endl
 		   << "<br>" << std::endl
 		   << "<br>" << std::endl
-		   << content << "</html>";
+		   << content << "</body>\n</html>";
 
 		return ss.str();
 	}
@@ -37,9 +37,9 @@ namespace SDDS
 		std::string inputStr;
 		if (input.good())
 		{
-			inputStr = "<h1>";
 			std::getline(input, inputStr);
-			inputStr.append("</h1>").append("<br/>").append("<br/>");
+			inputStr.append("</h1>\n").append("<br>\n").append("<br>\n");
+			inputStr = "<h1>" + inputStr;
 		}
 		while (input.good())
 		{
@@ -47,6 +47,70 @@ namespace SDDS
 			std::getline(input, strTmp);
 			strTmp = "<p>" + strTmp;
 			strTmp.append("</p>");
+			inputStr.append(strTmp);
+			inputStr.append("\n");
+		}
+		return inputStr.c_str();
+	}
+	//Markdown version of read File
+	const std::string readFileAsHtmlStrMD(const std::string filePath) //Markdown Conversion 
+	{
+		std::ifstream input(filePath);
+		std::string inputStr;
+		if (input.good())
+		{
+			std::getline(input, inputStr);
+			inputStr.append("</h1>\n").append("<br>\n").append("<br>\n");
+			inputStr = "<h1>" + inputStr;
+		}
+		while (input.good())
+		{
+			std::string strTmp;
+			std::getline(input, strTmp);
+			//Checks for markdown heading tag
+			if (strTmp.find("# ") != std::string::npos)
+			{
+				if (strTmp.at(0) == '#' && strTmp.at(1) == ' ')
+				{
+					strTmp.replace(0, 2, "");
+					strTmp = "<h1>" + strTmp;
+					strTmp.append("</h1>");
+				}
+				else
+				{
+					strTmp = "<p>" + strTmp;
+					strTmp.append("</p>");
+				}
+			}
+			else
+			{
+				strTmp = "<p>" + strTmp;
+				strTmp.append("</p>");
+			}
+
+			//Indents the string by finding the astrix
+			if (strTmp.find('*') != std::string::npos)
+			{
+				//Position of the first astrix
+				size_t astrix = strTmp.find("*");
+				//Position of the last astrix
+				size_t pos = 0;
+
+				//Loops through the string to look for the astrix
+				for (size_t i = astrix + 1; i < strTmp.size(); i++)
+				{
+					if (strTmp.at(i) == '*')
+						pos = i;
+				}
+
+				//Stores the end of the string to add after the indent
+				std::string endStr = strTmp.substr(pos + 1);
+
+				std::string newStr = "<i>" + strTmp.substr(astrix + 1, (pos - astrix) - 1) + "</i>";
+				strTmp.replace(strTmp.find("*"), newStr.size(), newStr);
+				strTmp.append(endStr);
+			}
+
 			inputStr.append(strTmp);
 			inputStr.append("\n");
 		}
