@@ -11,10 +11,13 @@ int main(int argc, char *argv[])
 	}
 	for (int i = 1; i < argc; i++)
 	{
-		if (argv[i][0] == '-')
+		if (argv[i][0] == '-' || argv[i][0] == '/' || argv[i][0] == '\\')
 		{
-			argQueue.addArg(argv[i], argv[i + 1]);
+			if (!argQueue.addArg(argv[i], argv[i + 1]))
+				exit(-1);
 		}
 	}
 	argQueue.execute();
+
+	exit(0);
 }

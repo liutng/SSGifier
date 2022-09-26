@@ -21,6 +21,7 @@ bool SDDS::ArgumentQueue::execute()
 	std::string inputFile;
 	std::string outputFileDir;
 	std::string styleSheet;
+	std::string language;
 	if (mArgCnt == 0)
 	{
 		mMessage = "Please at least specify an input file.";
@@ -54,6 +55,9 @@ bool SDDS::ArgumentQueue::execute()
 			case Argument::ArgTag::CSS:
 				styleSheet = mArgs[i]->mArg;
 				break;
+			case Argument::ArgTag::LANGUAGE:
+				language = mArgs[i]->mArg;
+				break;
 			}
 		}
 		if (unkownArg)
@@ -67,12 +71,12 @@ bool SDDS::ArgumentQueue::execute()
 				<< "SSGifier is a commandline application to generate static website from txt files." << std::endl
 				<< std::endl
 				<< "The list below is all the different parameters you can pass to SSGifier." << std::endl
-				<< "-v, --version - prints out the version of SSGifier" << std::endl
 				<< "-o, --output - (Optional) specify the output directory, the directory \" dlist\" is used by default." << std::endl
 				<< "-i, --input - (Necessary) specify the input files\\directory, this is an necessary argument." << std::endl
 				<< "-s, --stylesheet - (Optional) specify the stylesheet for the HTML pages." << std::endl
-				<< "-h, --help - show help."
-				<< std::endl;
+				<< "-l, --lang, /l, \\l - (Optional) specify the language that the HTML uses, it will be added to lang attirbute of <html>." << std::endl
+				<< "-h, --help - show help." << std::endl
+				<< "-v, --version - prints out the version of SSGifier" << std::endl;
 		else if (showVersion)
 			std::cout << "SSGifier V0.1 by Tong Liu" << std::endl;
 		else if (emptyArg)
@@ -96,11 +100,11 @@ bool SDDS::ArgumentQueue::execute()
 				for (const auto &entry : std::filesystem::directory_iterator(inputFile))
 				{
 					if (entry.path().string().find(".txt") != std::string::npos) // Only process .txt files
-						convertFile(entry.path().string(), outputFileDir, styleSheet);
+						convertFile(entry.path().string(), outputFileDir, styleSheet, language);
 				}
 			}
 			else
-				convertFile(inputFile, outputFileDir, styleSheet);
+				convertFile(inputFile, outputFileDir, styleSheet, language);
 		}
 	}
 	return rc;
@@ -142,6 +146,8 @@ bool SDDS::Argument::parseArg(const char *switchStr, const char *arg)
 	}
 	else if (std::strcmp(switchStr, "--stylesheet") == 0 || std::strcmp(switchStr, "-s") == 0)
 		mArgTag = ArgTag::CSS;
+	else if (std::strcmp(switchStr, "--lang") == 0 || std::strcmp(switchStr, "-l") == 0 || std::strcmp(switchStr, "/l") == 0 || std::strcmp(switchStr, "\\l") == 0)
+		mArgTag = ArgTag::LANGUAGE;
 	else
 	{
 		mArgTag = ArgTag::UNKOWN;
@@ -169,7 +175,7 @@ SDDS::Argument::~Argument()
 	// delete[] mArg;
 }
 
-void SDDS::ArgumentQueue::convertFile(std::string inputFile, std::string outputFileDir, std::string stylesheet)
+void SDDS::ArgumentQueue::convertFile(std::string inputFile, std::string outputFileDir, std::string stylesheet, std::string language)
 {
 
 	std::string fileContent = SDDS::readFileAsHtmlStr(inputFile).c_str();
@@ -182,7 +188,7 @@ void SDDS::ArgumentQueue::convertFile(std::string inputFile, std::string outputF
 	{
 		std::string fileName = SDDS::extractFileName(inputFile);
 		fileName = fileName.substr(0, fileName.find('.'));
-		const std::string HTMLContentStr = SDDS::generateHTMLAsStr(fileName, fileContent, stylesheet);
+		const std::string HTMLContentStr = SDDS::generateHTMLAsStr(fileName, fileContent, stylesheet, language);
 		if (outputFileDir.substr(0, 2) == "./" || outputFileDir.substr(0, 2) == ".\\") // remove the ./ or .\ at the begining of output file directory.
 			outputFileDir = outputFileDir.substr(outputFileDir.find(".") + 1, outputFileDir.length());
 		if (outputFileDir.find("\\") == std::string::npos && outputFileDir.find("/") == std::string::npos) // Append output path with "/" if the output arg is not postfixed with /

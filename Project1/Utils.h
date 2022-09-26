@@ -6,12 +6,11 @@
 #include <filesystem>
 namespace SDDS
 {
-	const std::string generateHTMLAsStr(const std::string fileName, const std::string content, const std::string stylesheet)
+	const std::string generateHTMLAsStr(const std::string fileName, const std::string content, const std::string stylesheet, const std::string language)
 	{
-
 		std::stringstream ss;
 		ss << "<!doctype html>"
-		   << "<html lang = \"en\">" << std::endl
+		   << "<html lang = \"" << (language.empty() ? "en-CA" : language) << "\">" << std::endl
 		   << "<head>" << std::endl;
 		if (!stylesheet.empty())
 			ss << "<link rel=\"stylesheet\" href=\"" << stylesheet << "\"" << std::endl;
