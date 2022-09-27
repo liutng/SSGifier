@@ -57,9 +57,12 @@ bool SDDS::ArgumentQueue::execute()
 			}
 		}
 		if (unkownArg)
+		{
 			std::cout << "Unkown switch "
 					  << "\"" << unkownSwitchStr << "\"." << std::endl
 					  << "Use --help or -h for help." << std::endl;
+			throw std::exception();
+		}
 		else if (showHelp)
 			std::cout
 				<< "Usage: ssgifier --input <file/directory path> [optional command]" << std::endl
@@ -76,7 +79,10 @@ bool SDDS::ArgumentQueue::execute()
 		else if (showVersion)
 			std::cout << "SSGifier V0.1 by Tong Liu" << std::endl;
 		else if (emptyArg)
+		{
 			std::cout << "Empty argument for " << '"' << emptySwtichStr << '"' << " is provided." << std::endl;
+			throw std::exception();
+		}
 		else if (inputFile.empty())
 			std::cout << "Input file is necessary to be provided." << std::endl;
 		else
@@ -177,6 +183,7 @@ void SDDS::ArgumentQueue::convertFile(std::string inputFile, std::string outputF
 	if (fileContent.empty())
 	{
 		std::cout << "Cannot find file or directory: " << inputFile << std::endl;
+		throw std::exception();
 	}
 	else
 	{
@@ -191,6 +198,9 @@ void SDDS::ArgumentQueue::convertFile(std::string inputFile, std::string outputF
 		if (SDDS::writeHTMLToFile(filePath, HTMLContentStr))
 			std::cout << filePath << " is successfully converted and written." << std::endl;
 		else
+		{
 			std::cout << "Could not write " << filePath << std::endl;
+			throw std::exception();
+		}
 	}
 }
