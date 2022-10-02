@@ -16,7 +16,8 @@ namespace SDDS
 			ERROR,
 			EMPTY,
 			CSS,
-			LANGUAGE
+			LANGUAGE,
+			CONFIG
 		};
 		ArgTag getArgTag();
 		bool parseArg(const char *switchStr, const char *arg);
@@ -34,7 +35,6 @@ namespace SDDS
 		std::string mMessage;
 		void convertFile(std::string inputFile, std::string outputFileDir, std::string stylesheet, std::string language);
 		void convertFileMD(std::string inputFile, std::string outputFileDir, std::string stylesheet, std::string language);
-
 	public:
 		bool addArg(const char *switchStr, const char *arg);
 		bool execute();

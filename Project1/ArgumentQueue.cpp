@@ -4,6 +4,10 @@
 #include <filesystem>
 #include "ArgumentQueue.h"
 #include "Utils.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
+
 bool SDDS::ArgumentQueue::addArg(const char *switchStr, const char *arg)
 {
 	bool rc;
@@ -15,13 +19,14 @@ bool SDDS::ArgumentQueue::addArg(const char *switchStr, const char *arg)
 bool SDDS::ArgumentQueue::execute()
 {
 	bool rc = false;
-	bool showVersion = false, showHelp = false, emptyArg = false, unkownArg = false;
+	bool showVersion = false, showHelp = false, emptyArg = false, unkownArg = false, hasConfig = false;
 	std::string unkownSwitchStr;
 	std::string emptySwtichStr;
 	std::string inputFile;
 	std::string outputFileDir;
 	std::string styleSheet;
 	std::string language;
+	std::string config;
 	if (mArgCnt == 0)
 	{
 		mMessage = "Please at least specify an input file.";
@@ -58,6 +63,43 @@ bool SDDS::ArgumentQueue::execute()
 			case Argument::ArgTag::LANGUAGE:
 				language = mArgs[i]->mArg;
 				break;
+			case Argument::ArgTag::CONFIG:
+				config = mArgs[i]->mArg;
+				hasConfig = true;
+				break;
+			}
+		}
+		if (hasConfig)
+		{
+			try
+			{
+				json data = SDDS::readJSONContents(config);
+
+				// goes through the JSON object and fills the options with the correct input
+				for (json::iterator it = data.begin(); it != data.end(); ++it) {
+					if (it.key() == "input")
+					{
+						inputFile = *it;
+					}
+					else if(it.key() == "output")
+					{
+						outputFileDir = *it;
+					}
+					else if(it.key() == "stylesheet")
+					{
+						styleSheet = *it;
+					}
+					else if(it.key() == "lang")
+					{
+						language = *it;
+					}
+					
+				}
+			}
+			catch(const std::exception& e)
+			{
+				std::cout << "Cannot find config file: " << config << std::endl;
+				throw std::exception();
 			}
 		}
 		if (unkownArg)
@@ -101,6 +143,17 @@ bool SDDS::ArgumentQueue::execute()
 				std::filesystem::remove_all(outputFileDir);
 			}
 
+			//removes ./ if input has it inside of the command
+			if (inputFile.at(0) == '.' && inputFile.at(1) == '/')
+			{
+				inputFile = inputFile.substr(2);
+			}
+			//removes ./ if outPutDir has it inside of the command
+			if (outputFileDir.at(0) == '.' && outputFileDir.at(1) == '/')
+			{
+				outputFileDir = outputFileDir.substr(2);
+			}
+
 			if (SDDS::checkIfItsDirectory(inputFile))
 			{ // if the input arg is a directory
 				for (const auto &entry : std::filesystem::directory_iterator(inputFile))
@@ -119,6 +172,10 @@ bool SDDS::ArgumentQueue::execute()
 			else if (inputFile.find(".md") != std::string::npos) // checks if it is md file
 			{
 				convertFileMD(inputFile, outputFileDir, styleSheet, language);
+			}
+			else
+			{
+				std::cout << "Cannot Find File or Directory" << std::endl;
 			}
 		}
 	}
@@ -159,6 +216,10 @@ bool SDDS::Argument::parseArg(const char *switchStr, const char *arg)
 		mArgTag = ArgTag::CSS;
 	else if (std::strcmp(switchStr, "--lang") == 0 || std::strcmp(switchStr, "-l") == 0 || std::strcmp(switchStr, "/l") == 0 || std::strcmp(switchStr, "\\l") == 0)
 		mArgTag = ArgTag::LANGUAGE;
+	else if (std::strcmp(switchStr, "--config") == 0 || std::strcmp(switchStr, "-c") == 0)
+	{
+		mArgTag = ArgTag::CONFIG;
+	}
 	else
 	{
 		mArgTag = ArgTag::UNKOWN;

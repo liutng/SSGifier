@@ -4,6 +4,10 @@
 #include <sstream>
 #include <fstream>
 #include <filesystem>
+#include "json.hpp"
+
+using json = nlohmann::json;
+
 namespace SDDS
 {
 	const std::string generateHTMLAsStr(const std::string fileName, const std::string content, const std::string stylesheet, const std::string language)
@@ -139,5 +143,19 @@ namespace SDDS
 		else if (filePath.find("\\") != std::string::npos)
 			fileName = filePath.substr(filePath.find_last_of("\\") + 1, filePath.length());
 		return fileName;
+	}
+	const json readJSONContents(std::string config)
+	{
+		json data;
+		try
+		{
+			std::ifstream input(config);
+			data = json::parse(input);
+		}
+		catch(const std::exception& e)
+		{
+			throw std::exception();
+		}
+		return data;
 	}
 }
