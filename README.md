@@ -20,11 +20,14 @@ The list below is all the different parameters you can pass to SSGifier.
 -o, --output - specify the output directory, the directory " dlist" is used by default.(Optional)  
 -i, --input - specify the input files\directory, this is an necessary argument.  
 -s, --stylesheet - specify the stylesheet for the HTML pages.(Optional)  
--h, --help - show help.  
+-h, --help - show help.
+-c, --config - config command  
   
 # Added 
 
 Markdown Support added for # Headings and * Italics just use a file with a .md file extension
+
+JSON Support with the config option Using the JSON parser from this Repository [nlohmann/json](https://github.com/nlohmann/json)
 
 # Added 
 
@@ -32,3 +35,5 @@ Markdown Support added for # Headings and * Italics just use a file with a .md f
 
 # License
 [Do What The Fuck You Want To Public License(WTFPL)](https://raw.githubusercontent.com/liutng/SSGifier/main/License.md)
+
+
