@@ -1,4 +1,0 @@
-﻿  ArgumentQueue.cpp
-C:\Users\piotr\Desktop\SSGifier\Project1\ArgumentQueue.cpp(131,8): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\piotr\Desktop\SSGifier\Project1\ArgumentQueue.cpp(134,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  Project1.vcxproj -> C:\Users\piotr\Desktop\SSGifier\Project1\Debug\Project1.exe
