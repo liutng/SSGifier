@@ -7,15 +7,6 @@ This is a CLI SSG(Static Site Generator) that generates static website.
 - allow the user to specify a different output directory using --output or -o. If not specified, dist will be used, but if the user specifies a different output path, use that. Print an error if the specified output path is not a valid directory.
 - allow the user to optionally specify a --stylesheet or -s URL to a CSS stylesheet to be used in the <head> of your generated HTML files.
 
-# Requirements
-
-- C++ 2017
-- Linux/Windows
-
-# How to compile
-
-`g++ main.cpp ArgumentQueue.cpp Utils.h -std=c++17`
-
 # How to use
 
 This is a CLI software which requires to use terminal to run it.
