@@ -1,5 +1,4 @@
 #include "FileProcessor.h"
-#include "Utils.h"
 #include <filesystem>
 
 void SDDS::FileProcessor::convertFile(std::string inputFile,
