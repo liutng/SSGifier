@@ -2,3 +2,4 @@ Sherlock-Holmes-Selected-Stories/
 *.gch
 *.out
 /dist
+test_result.xml
