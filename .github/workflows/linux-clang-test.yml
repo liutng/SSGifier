@@ -29,9 +29,7 @@ jobs:
       - name: Running tests
         env:
           CTEST_OUTPUT_ON_FAILURE: 1
-        working-directory: ${{runner.workspace}}/
         run: ./test.o
 
       - name: Cleaning tests
-        working-directory: ${{runner.workspace}}/
         run: rm ./test.o
