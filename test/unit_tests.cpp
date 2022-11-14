@@ -25,7 +25,7 @@ TEST_CASE("Arguments test","[ArgumentQueue::addArg()]"){
         REQUIRE(aq.addArg("|!djqiw", "none") == false);
     }
     SECTION("With empty switch"){
-        REQUIRE(aq.addArg("", "something") == true);
+        REQUIRE(aq.addArg("", "something") == false);
     }
 
 }
@@ -40,6 +40,6 @@ TEST_CASE("HTML file parser test", "[SDDS::Utils::readFileAsHtmlStr()]"){
         REQUIRE(SDDS::readFileAsHtmlStr("test/nonexist.txt").empty());
     }
     SECTION("Empty file name"){
-        REQUIRE(!SDDS::readFileAsHtmlStr("").empty());
+        REQUIRE(SDDS::readFileAsHtmlStr("").empty());
     }
     }
