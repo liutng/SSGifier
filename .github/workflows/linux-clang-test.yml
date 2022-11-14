@@ -16,23 +16,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Prepare environment
+      - name: Preparing environment
         run: sudo apt-get install -y clang
 
-      - name: Build tests
-        working-directory: ${{runner.workspace}}/
+      - name: Building tests
         env:
           CXX: ./test/unit_tests.cpp Utils.cpp ArgumentQueue.cpp MessagePrinter.cpp FileProcessor.cpp ./test/catch_amalgamated.cpp
           CXXFLAGS: -std=c++17
           OUTPUTFILE: test.o
         run: clang++ $CXXFLAGS $CXX -o $OUTPUTFILE
 
-      - name: Run tests
+      - name: Running tests
         env:
           CTEST_OUTPUT_ON_FAILURE: 1
         working-directory: ${{runner.workspace}}/
         run: ./test.o
 
-      - name: Clean tests
+      - name: Cleaning tests
         working-directory: ${{runner.workspace}}/
         run: rm ./test.o
