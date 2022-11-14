@@ -24,7 +24,8 @@ jobs:
         env:
           CXX: ./test/unit_tests.cpp Utils.cpp ArgumentQueue.cpp MessagePrinter.cpp FileProcessor.cpp ./test/catch_amalgamated.cpp
           CXXFLAGS: -std=c++17
-        run: clang++ ${{CXXFLAGS}} ${{CXX}} -o test.o
+          OUTPUTFILE: test.o
+        run: clang++ $CXXFLAGS $CXX -o $OUTPUTFILE
 
       - name: Run tests
         env:
