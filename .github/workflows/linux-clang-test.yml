@@ -1,0 +1,34 @@
+name: C++ CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_rqeuest:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: SSGifier Unit tests
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare environment
+        run: sudo apt-get install -y clang
+
+      - name: Build tests
+        working-directory: ${{runner.workspace}}/
+        env:
+          CXX: ./test/unit_tests.cpp Utils.cpp ArgumentQueue.cpp MessagePrinter.cpp FileProcessor.cpp ./test/catch_amalgamated.cpp
+          CXXFLAGS: -std=c++17
+        run: clang++ ${{CXXFLAGS}} ${{CXX}} -o test.o
+
+      - name: Run tests
+        env:
+          CTEST_OUTPUT_ON_FAILURE: 1
+        working-directory: ${{runner.workspace}}/
+        run: ./test.o
+
+      - name: Clean tests
+        working-directory: ${{runner.workspace}}/
+        run: rm ./test.o
