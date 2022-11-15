@@ -27,7 +27,6 @@ TEST_CASE("Arguments test","[ArgumentQueue::addArg()]"){
     SECTION("With empty switch"){
         REQUIRE(aq.addArg("", "something") == false);
     }
-
 }
 /**
  * This test case tests the function that reads the original file as HTML string
@@ -43,3 +42,17 @@ TEST_CASE("HTML file parser test", "[SDDS::Utils::readFileAsHtmlStr()]"){
         REQUIRE(SDDS::readFileAsHtmlStr("").empty());
     }
     }
+/**
+ * This test case tests the markdown functionality
+*/
+TEST_CASE("HTML Markdown test","[SDDS::Utils::readFileAsHtmlStrMD()]"){
+    SECTION("Existing file"){
+        REQUIRE(!SDDS::readFileAsHtmlStr("test/test.md").empty());
+    }
+    SECTION("Non-existing file"){
+        REQUIRE(SDDS::readFileAsHtmlStr("test/nonexist.md").empty());
+    }
+    SECTION("Empty file name"){
+        REQUIRE(SDDS::readFileAsHtmlStr("").empty());
+    }
+}
