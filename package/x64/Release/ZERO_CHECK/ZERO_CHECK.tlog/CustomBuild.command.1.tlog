@@ -1,0 +1,10 @@
+^G:\SENECA\GIT\TONG\Y4S1\OPEN-SOURCE-PROJECT(DPS909)\REPO\SSGIFIER\PACKAGE\CMAKEFILES\5750308BE8ACFD449384475967747247\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SG:/Seneca/git/tong/y4s1/open-source-project(DPS909)/Repo/SSGifier/package -BG:/Seneca/git/tong/y4s1/open-source-project(DPS909)/Repo/SSGifier/package --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file G:/Seneca/git/tong/y4s1/open-source-project(DPS909)/Repo/SSGifier/package/SSGifier.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

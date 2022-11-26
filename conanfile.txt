@@ -1,0 +1,4 @@
+[requires]
+maddy/1.1.2
+[generators]
+gcc

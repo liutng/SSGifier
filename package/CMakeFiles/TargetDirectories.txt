@@ -1,0 +1,3 @@
+G:/Seneca/git/tong/y4s1/open-source-project(DPS909)/Repo/SSGifier/package/CMakeFiles/SSGifier.dir
+G:/Seneca/git/tong/y4s1/open-source-project(DPS909)/Repo/SSGifier/package/CMakeFiles/ALL_BUILD.dir
+G:/Seneca/git/tong/y4s1/open-source-project(DPS909)/Repo/SSGifier/package/CMakeFiles/ZERO_CHECK.dir
